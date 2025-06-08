@@ -4,7 +4,7 @@ This is a simple, clean, and fully functional calculator built using **HTML**, *
 
 ## 🚀 Live Demo
 
-- 🌐 **Live Site URL**: [View it in action](https://your-live-site-url.com)  
+- 🌐 **Live Site URL**: [View it in action](https://calculator-webapp-mu.vercel.app/)
 - 💻 **Solution URL**: [See the code](https://github.com/SanyaShresta25/Calculator-Webappp)
 
 ## 📸 Screenshot
