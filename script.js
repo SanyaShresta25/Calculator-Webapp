@@ -5,15 +5,15 @@ class Calculator {
         this.previous = '';
         this.operator = null;
         this.waitingForInput = false;
-        
+
         this.init();
     }
-    
+
     init() {
         this.addEventListeners();
         this.updateDisplay('0');
     }
-    
+
     addEventListeners() {
         document.querySelectorAll('.btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -26,44 +26,44 @@ class Calculator {
                 }
             });
         });
-        
+
         document.addEventListener('keydown', (e) => {
             this.handleKeyboard(e);
         });
     }
-    
+
     inputNumber(number) {
         if (this.waitingForInput) {
             this.current = '';
             this.waitingForInput = false;
         }
-        
+
         if (number === '.') {
             if (this.current.includes('.')) return;
             if (this.current === '') this.current = '0';
         }
-        
+
         if (this.current === '0' && number !== '.') {
             this.current = number;
         } else {
             this.current += number;
         }
-        
+
         this.updateDisplay(this.current);
     }
-    
+
     inputOperator(op) {
         if (this.current === '') return;
-        
+
         if (this.previous !== '' && this.operator && !this.waitingForInput) {
             this.calculate();
         }
-        
+
         this.operator = op;
         this.previous = this.current;
         this.waitingForInput = true;
     }
-    
+
     performAction(action) {
         switch (action) {
             case 'equals':
@@ -75,16 +75,19 @@ class Calculator {
             case 'reset':
                 this.reset();
                 break;
+            case 'even-odd':
+                this.checkEvenOrOdd();
+                break;
         }
     }
-    
+
     calculate() {
         if (this.previous === '' || this.current === '' || !this.operator) return;
-        
+
         const prev = parseFloat(this.previous);
         const curr = parseFloat(this.current);
         let result;
-        
+
         switch (this.operator) {
             case '+':
                 result = prev + curr;
@@ -104,14 +107,14 @@ class Calculator {
                 result = prev / curr;
                 break;
         }
-        
+
         this.current = this.formatNumber(result.toString());
         this.operator = null;
         this.previous = '';
         this.waitingForInput = true;
         this.updateDisplay(this.current);
     }
-    
+
     delete() {
         if (this.current.length > 1) {
             this.current = this.current.slice(0, -1);
@@ -120,7 +123,7 @@ class Calculator {
         }
         this.updateDisplay(this.current);
     }
-    
+
     reset() {
         this.current = '';
         this.previous = '';
@@ -128,14 +131,14 @@ class Calculator {
         this.waitingForInput = false;
         this.updateDisplay('0');
     }
-    
+
     formatNumber(num) {
         if (Math.abs(parseFloat(num)) > 999999999) {
             return parseFloat(num).toExponential(6);
         }
         return parseFloat(num).toString();
     }
-    
+
     updateDisplay(value) {
         if (value !== 'Error' && !isNaN(value) && !value.includes('e')) {
             const parts = value.split('.');
@@ -144,7 +147,7 @@ class Calculator {
         }
         this.display.textContent = value;
     }
-    
+
     handleKeyboard(e) {
         if (e.key >= '0' && e.key <= '9' || e.key === '.') {
             this.inputNumber(e.key);
@@ -160,6 +163,17 @@ class Calculator {
         } else if (e.key === 'Escape') {
             this.performAction('reset');
         }
+    }
+
+    checkEvenOrOdd() {
+        const num = parseInt(this.current);
+        if (isNaN(num)) {
+            this.updateDisplay('Invalid');
+            return;
+        }
+        const result = num % 2 === 0 ? 'Even' : 'Odd';
+        this.updateDisplay(result);
+        this.waitingForInput = true;
     }
 }
 
